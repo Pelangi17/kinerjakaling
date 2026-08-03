@@ -75,6 +75,28 @@
         </div>
     </div>
 
+    <!-- Modal Tindak Lanjut Lurah -->
+    <div id="solve-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-[1100] hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-card w-11/12 max-w-lg transform scale-95 transition-transform duration-300 overflow-hidden" id="solve-modal-content">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-emerald-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fas fa-clipboard-check"></i></div>
+                    <h3 class="text-lg font-bold text-emerald-800">Tindak Lanjut Kelurahan</h3>
+                </div>
+                <button onclick="ui.closeSolveModal()" class="text-slate-400 hover:text-slate-700 transition-colors rounded-full p-1 hover:bg-slate-200"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm font-medium text-slate-500 mb-4">Silakan masukkan tanggapan atau tindakan penyelesaian dari pihak Kelurahan atas permasalahan ini.</p>
+                <input type="hidden" id="solve-id-laporan">
+                <textarea id="solve-input-text" rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all text-slate-700 font-medium leading-relaxed" placeholder="Contoh: Telah dikoordinasikan dengan dinas terkait dan sudah diselesaikan..."></textarea>
+            </div>
+            <div class="p-5 border-t border-slate-100 flex justify-end gap-3 bg-slate-50">
+                <button onclick="ui.closeSolveModal()" class="px-5 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-700 hover:bg-slate-100 transition-all text-sm font-bold shadow-sm">Batal</button>
+                <button onclick="dataLogic.submitSolveMasalah()" class="px-5 py-2.5 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 shadow-md shadow-emerald-500/30 transition-all text-sm font-bold flex items-center gap-2"><i class="fas fa-check"></i> Simpan Penyelesaian</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Screen Login -->
     <div id="login-screen" class="fixed inset-0 bg-slate-100 flex items-center justify-center z-[100] overflow-y-auto bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
         <div class="w-full max-w-5xl flex rounded-3xl shadow-2xl overflow-hidden m-4 bg-white min-h-[550px]">
@@ -195,7 +217,7 @@
                     <div class="bg-white rounded-2xl shadow-card border border-slate-100/50 p-6 lg:p-8">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                             <div>
-                                <h3 class="text-lg font-extrabold text-slate-800">Laporan Terbaru</h3>
+                                <h3 class="text-lg font-extrabold text-slate-800" id="dashboard-table-title">Laporan Terbaru</h3>
                                 <p class="text-sm font-medium text-slate-500 mt-1">Ringkasan aktivitas terkini bulan ini.</p>
                             </div>
                             <button onclick="ui.switchView(appState.user.role === 'kaling' ? 'laporanku' : 'semua-laporan')" class="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-sm text-primary font-bold transition-colors">
@@ -209,7 +231,7 @@
                                         <th class="p-4 font-extrabold">Tanggal</th>
                                         <th class="p-4 font-extrabold">Kaling</th>
                                         <th class="p-4 font-extrabold">Kegiatan</th>
-                                        <th class="p-4 font-extrabold text-center">Status</th>
+                                        <th class="p-4 font-extrabold text-center">Status / Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="dashboard-recent-table" class="text-sm divide-y divide-slate-100">
@@ -219,7 +241,7 @@
                                 <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-3">
                                     <i class="fas fa-inbox text-2xl"></i>
                                 </div>
-                                <p class="text-sm font-bold">Belum ada laporan bulan ini.</p>
+                                <p class="text-sm font-bold">Belum ada laporan relevan bulan ini.</p>
                             </div>
                         </div>
                     </div>
@@ -302,7 +324,7 @@
                                     <input type="file" id="input-foto" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="ui.previewFileName(this)">
                                     <i class="fas fa-cloud-upload-alt text-4xl text-primary mb-3 group-hover:scale-110 transition-transform"></i>
                                     <p class="text-sm font-extrabold text-slate-700" id="file-name-display">Klik untuk memilih gambar</p>
-                                    <p class="text-xs font-bold text-slate-400 mt-2">Maksimal 3MB (JPG, PNG)</p>
+                                    <p class="text-xs font-bold text-slate-400 mt-2">Maksimal 10MB (JPG, PNG)</p>
                                 </div>
                             </div>
 
@@ -328,7 +350,7 @@
                                         <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
                                     </select>
                                     <select id="filter-tahun-select" class="bg-transparent text-sm font-bold text-slate-700 py-1.5 px-2 outline-none cursor-pointer w-24" onchange="dataLogic.renderTable()" title="Pilih Tahun">
-                                        <option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option>
+                                        <option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option>
                                     </select>
                                 </div>
                                 <select id="filter-kaling" class="w-full sm:w-auto px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none shadow-sm hidden text-slate-700 transition-all cursor-pointer" onchange="dataLogic.renderTable()">
@@ -342,15 +364,15 @@
                         </div>
 
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse whitespace-nowrap min-w-[1000px]">
+                            <table class="w-full text-left border-collapse whitespace-nowrap min-w-[1100px]">
                                 <thead>
                                     <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
                                         <th class="p-4 pl-6 font-extrabold w-12 text-center">No</th>
                                         <th class="p-4 font-extrabold">Tanggal</th>
                                         <th class="p-4 font-extrabold kaling-col hidden">Lingkungan</th>
                                         <th class="p-4 font-extrabold">Kegiatan</th>
-                                        <th class="p-4 font-extrabold w-80 text-wrap">Uraian</th>
-                                        <th class="p-4 font-extrabold text-center">Status Masalah</th>
+                                        <th class="p-4 font-extrabold w-72 text-wrap">Uraian</th>
+                                        <th class="p-4 font-extrabold text-center min-w-[200px]">Status Masalah & Tindak Lanjut</th>
                                         <th class="p-4 pr-6 font-extrabold text-center">Lampiran</th>
                                     </tr>
                                 </thead>
@@ -376,7 +398,7 @@
                             <i class="fas fa-tools text-4xl"></i>
                         </div>
                         <h3 class="text-2xl font-extrabold text-slate-800 mb-3">Manajemen Pengguna</h3>
-                        <p class="text-slate-500 font-medium max-w-lg mx-auto leading-relaxed">Pengelolaan pengguna (Tambah Kaling / Reset Password) diatur langsung dari Google Sheets (Sheet: Users) pada versi ini demi keamanan database.</p>
+                        <p class="text-slate-500 font-medium max-w-lg mx-auto leading-relaxed">Pengelolaan pengguna (Tambah Kaling / Reset Password) sekarang dilakukan secara eksklusif dan lebih aman melalui menu <b>"⚙️ Menu Kaling"</b> di dalam file Google Sheets Anda.</p>
                     </div>
                 </div>
                 
@@ -415,7 +437,7 @@
         */
         const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeO-JAvT3VxHYcfhKn_v-KGXhelFiHC9UWulNj92PC4d9lb2Cfgs20Rejq0GvZNc4g/exec";
 
-        /** STATE APLIKASI (Kosong secara default, diisi via Fetch) */
+        /** STATE APLIKASI */
         const appState = {
             user: null, 
             currentView: 'dashboard',
@@ -497,6 +519,18 @@
                 modal.classList.add('opacity-0'); modal.querySelector('#modal-content').classList.add('scale-95');
                 setTimeout(() => { modal.classList.add('hidden'); }, 300);
             },
+            openSolveModal: (idLaporan) => {
+                document.getElementById('solve-id-laporan').value = idLaporan;
+                document.getElementById('solve-input-text').value = '';
+                const modal = document.getElementById('solve-modal');
+                modal.classList.remove('hidden'); void modal.offsetWidth;
+                modal.classList.remove('opacity-0'); modal.querySelector('#solve-modal-content').classList.remove('scale-95');
+            },
+            closeSolveModal: () => {
+                const modal = document.getElementById('solve-modal');
+                modal.classList.add('opacity-0'); modal.querySelector('#solve-modal-content').classList.add('scale-95');
+                setTimeout(() => { modal.classList.add('hidden'); }, 300);
+            },
             toggleSidebar: () => {
                 const sb = document.getElementById('sidebar'), overlay = document.getElementById('sidebar-overlay');
                 if(sb.classList.contains('hidden') || sb.classList.contains('-translate-x-full')) {
@@ -540,8 +574,9 @@
             previewFileName: (input) => {
                 const display = document.getElementById('file-name-display');
                 if(input.files && input.files[0]) {
-                    if(input.files[0].size > 3 * 1024 * 1024) {
-                        ui.showToast('Gagal', 'Ukuran file lebih dari 3MB', 'error');
+                    // Update ke 10MB
+                    if(input.files[0].size > 10 * 1024 * 1024) {
+                        ui.showToast('Gagal', 'Ukuran file lebih dari 10MB', 'error');
                         input.value = ''; display.innerText = 'Klik untuk memilih gambar';
                         return;
                     }
@@ -589,9 +624,8 @@
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 document.getElementById('current-date-header').innerText = now.toLocaleDateString('id-ID', options);
                 
-                // Cek URL Placeholder
                 if(APP_SCRIPT_URL.includes("YOUR_SCRIPT_ID")) {
-                    ui.showToast('Peringatan Developer', 'Harap ganti APP_SCRIPT_URL dengan URL deployment GAS Anda agar aplikasi dapat menyimpan ke database sesungguhnya.', 'error');
+                    ui.showToast('Peringatan Developer', 'Harap ganti APP_SCRIPT_URL dengan URL deployment GAS Anda agar aplikasi dapat berfungsi.', 'error');
                 }
             },
             logout: () => {
@@ -638,7 +672,7 @@
             fetchInitialData: async () => {
                 const data = await api.request({ action: 'get_data', role: appState.user.role, username: appState.user.username });
                 appState.laporan = data.laporan || [];
-                appState.users = data.users || []; // Hanya terisi jika admin/lurah
+                appState.users = data.users || []; 
                 
                 if(appState.user.role !== 'kaling') {
                     const select = document.getElementById('filter-kaling');
@@ -653,7 +687,7 @@
             },
             submitLaporan: async (e) => {
                 e.preventDefault();
-                ui.showLoading('Mengunggah Laporan...');
+                ui.showLoading('Mengunggah Laporan (Bisa memakan waktu untuk foto besar)...');
 
                 const isMasalah = document.querySelector('input[name="input-masalah"]:checked').value === 'Ya';
                 const payload = {
@@ -688,7 +722,7 @@
             sendLaporan: async (payload) => {
                 try {
                     const savedData = await api.request(payload);
-                    appState.laporan.unshift(savedData); // Prepend ke lokal
+                    appState.laporan.unshift(savedData);
                     document.getElementById('form-laporan').reset();
                     document.getElementById('file-name-display').innerText = 'Klik untuk memilih gambar';
                     document.getElementById('file-name-display').classList.remove('text-primary');
@@ -696,6 +730,38 @@
                     ui.hideLoading();
                     ui.showToast('Disimpan', 'Laporan kinerja berhasil dicatat ke sistem.', 'success');
                     ui.switchView('laporanku');
+                } catch(err) { ui.hideLoading(); }
+            },
+            submitSolveMasalah: async () => {
+                const id_laporan = document.getElementById('solve-id-laporan').value;
+                const textSolusi = document.getElementById('solve-input-text').value.trim();
+                
+                if(!textSolusi) { ui.showToast('Peringatan', 'Harap isi tanggapan/tindak lanjut Kelurahan.', 'error'); return; }
+                
+                ui.showLoading('Menyimpan Tanggapan...');
+                try {
+                    const res = await api.request({
+                        action: 'solve_masalah',
+                        id_laporan: id_laporan,
+                        tindak_lanjut_lurah: textSolusi,
+                        username: appState.user.username
+                    });
+                    
+                    // Update Local State
+                    const target = appState.laporan.find(l => l.id === id_laporan);
+                    if(target) {
+                        target.status_selesai = res.status_selesai;
+                        target.tindak_lanjut_lurah = res.tindak_lanjut_lurah;
+                    }
+                    
+                    ui.closeSolveModal();
+                    ui.hideLoading();
+                    ui.showToast('Tersimpan', 'Penyelesaian dari Lurah telah dicatat.', 'success');
+                    
+                    // Refresh view current
+                    if(appState.currentView === 'dashboard') dataLogic.renderDashboard();
+                    else dataLogic.renderTable(true);
+                    
                 } catch(err) { ui.hideLoading(); }
             },
             renderDashboard: () => {
@@ -713,24 +779,49 @@
                 
                 if(user.role === 'kaling') {
                     wHtml += `<div class="bg-white rounded-2xl shadow-card border border-slate-100 p-6 flex items-center gap-5 hover:-translate-y-1 transition-transform group"><div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-2xl shadow-inner group-hover:bg-emerald-500 group-hover:text-white transition-colors"><i class="fas fa-check-double"></i></div><div><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Kinerja Tanpa Masalah</p><h3 class="text-3xl font-extrabold text-slate-800 mt-1">${monthData.filter(l=>l.ada_masalah==='Tidak').length}</h3></div></div>`;
+                    wHtml += `<div class="bg-white rounded-2xl shadow-card border border-slate-100 p-6 flex items-center gap-5 hover:-translate-y-1 transition-transform group"><div class="w-14 h-14 rounded-2xl ${masalahData.length > 0 ? 'bg-amber-50 text-amber-500 group-hover:bg-amber-500 group-hover:text-white' : 'bg-slate-50 text-slate-400'} flex items-center justify-center text-2xl shadow-inner transition-colors"><i class="fas fa-clock"></i></div><div><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Menunggu Respon Lurah</p><h3 class="text-3xl font-extrabold text-slate-800 mt-1">${masalahData.length}</h3></div></div>`;
                 } else {
-                    wHtml += `<div class="bg-white rounded-2xl shadow-card border border-slate-100 p-6 flex items-center gap-5 hover:-translate-y-1 transition-transform group"><div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-2xl shadow-inner group-hover:bg-indigo-500 group-hover:text-white transition-colors"><i class="fas fa-user-tie"></i></div><div><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Kaling Terdaftar</p><h3 class="text-3xl font-extrabold text-slate-800 mt-1">${appState.users.length}</h3></div></div>`;
+                    wHtml += `<div class="bg-white rounded-2xl shadow-card border border-slate-100 p-6 flex items-center gap-5 hover:-translate-y-1 transition-transform group"><div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-2xl shadow-inner group-hover:bg-indigo-500 group-hover:text-white transition-colors"><i class="fas fa-user-tie"></i></div><div><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Kaling Aktif Bulan Ini</p><h3 class="text-3xl font-extrabold text-slate-800 mt-1">${[...new Set(monthData.map(item => item.username))].length}</h3></div></div>`;
+                    wHtml += `<div class="bg-white rounded-2xl shadow-card border border-slate-100 p-6 flex items-center gap-5 hover:-translate-y-1 transition-transform group"><div class="w-14 h-14 rounded-2xl ${masalahData.length > 0 ? 'bg-rose-50 text-rose-500 group-hover:bg-rose-500 group-hover:text-white border-2 border-rose-200' : 'bg-slate-50 text-slate-400'} flex items-center justify-center text-2xl shadow-inner transition-colors"><i class="fas fa-exclamation-triangle"></i></div><div><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider text-rose-500">Perlu Tindak Lanjut</p><h3 class="text-3xl font-extrabold text-slate-800 mt-1">${masalahData.length}</h3></div></div>`;
                 }
-
-                wHtml += `<div class="bg-white rounded-2xl shadow-card border border-slate-100 p-6 flex items-center gap-5 hover:-translate-y-1 transition-transform group"><div class="w-14 h-14 rounded-2xl ${masalahData.length > 0 ? 'bg-rose-50 text-rose-500 group-hover:bg-rose-500 group-hover:text-white' : 'bg-slate-50 text-slate-400'} flex items-center justify-center text-2xl shadow-inner transition-colors"><i class="fas fa-exclamation-triangle"></i></div><div><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Perlu Atensi (Pending)</p><h3 class="text-3xl font-extrabold text-slate-800 mt-1">${masalahData.length}</h3></div></div>`;
+                
                 wContainer.innerHTML = wHtml;
 
+                // Konfigurasi Tabel Beranda
                 const tbody = document.getElementById('dashboard-recent-table');
                 const emptyMsg = document.getElementById('dashboard-empty');
                 tbody.innerHTML = '';
                 
-                if(monthData.length === 0) {
+                let dataToRender = [];
+                // Jika Lurah/Operator dan ada masalah, prioritaskan masalah di dashboard
+                if (user.role !== 'kaling' && masalahData.length > 0) {
+                    document.getElementById('dashboard-table-title').innerText = "Perlu Tindak Lanjut Kelurahan";
+                    dataToRender = masalahData.slice(0, 5); // Tampilkan 5 masalah teratas
+                } else {
+                    document.getElementById('dashboard-table-title').innerText = "Laporan Terbaru";
+                    dataToRender = [...monthData].sort((a,b) => new Date(b.tanggal) - new Date(a.tanggal)).slice(0, 5);
+                }
+                
+                if(dataToRender.length === 0) {
                     emptyMsg.classList.remove('hidden'); emptyMsg.classList.add('flex');
                 } else {
                     emptyMsg.classList.remove('flex'); emptyMsg.classList.add('hidden');
-                    const sorted = [...monthData].sort((a,b) => new Date(b.tanggal) - new Date(a.tanggal)).slice(0, 5);
-                    sorted.forEach(item => {
-                        const badgeMasalah = item.ada_masalah === 'Ya' ? `<span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap border border-rose-200">Ada Masalah</span>` : `<span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap border border-emerald-200">Aman</span>`;
+                    dataToRender.forEach(item => {
+                        let badgeMasalah = '';
+                        if(item.ada_masalah === 'Tidak') {
+                            badgeMasalah = `<span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap border border-emerald-200">Aman</span>`;
+                        } else {
+                            if(item.status_selesai === 'Diteruskan ke Kelurahan') {
+                                if (user.role !== 'kaling') {
+                                    badgeMasalah = `<button onclick="ui.openSolveModal('${item.id}')" class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap shadow-md shadow-rose-500/20 transition-all flex items-center justify-center gap-1.5 mx-auto"><i class="fas fa-edit"></i> Beri Tanggapan</button>`;
+                                } else {
+                                    badgeMasalah = `<span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap border border-amber-200"><i class="fas fa-clock mr-1"></i> Menunggu Kelurahan</span>`;
+                                }
+                            } else {
+                                badgeMasalah = `<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap border border-blue-200"><i class="fas fa-check-double mr-1"></i> Selesai</span>`;
+                            }
+                        }
+
                         const tr = document.createElement('tr');
                         tr.className = "hover:bg-slate-50/80 transition-colors";
                         tr.innerHTML = `
@@ -770,8 +861,23 @@
                         
                         let masalahHtml = '<span class="text-slate-300 font-extrabold">-</span>';
                         if(item.ada_masalah === 'Ya') {
-                            const badgeColor = item.status_selesai && item.status_selesai.includes('Lingkungan') ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700';
-                            masalahHtml = `<div class="inline-flex items-center gap-1.5 ${badgeColor} px-2.5 py-1 rounded-md text-[11px] font-extrabold mb-1"><i class="fas fa-exclamation-circle"></i> Ya</div><div class="text-[11px] font-bold text-slate-500 truncate max-w-[140px]" title="${item.tindak_lanjut}">T: ${item.tindak_lanjut}</div>`;
+                            const badgeColor = item.status_selesai && item.status_selesai.includes('Lingkungan') || item.status_selesai.includes('Selesai') ? 'bg-blue-100 text-blue-700' : 'bg-rose-100 text-rose-700';
+                            
+                            masalahHtml = `<div class="inline-flex items-center gap-1.5 ${badgeColor} px-2.5 py-1 rounded-md text-[10px] uppercase tracking-wider font-extrabold mb-2"><i class="fas fa-exclamation-circle"></i> Ada Masalah</div>
+                            <div class="text-[11px] font-bold text-slate-500 mb-1" title="${item.tindak_lanjut}"><span class="text-slate-400">Kaling:</span> ${item.tindak_lanjut}</div>`;
+
+                            // Jika ada respon lurah (Selesai)
+                            if (item.tindak_lanjut_lurah) {
+                                masalahHtml += `<div class="text-[11px] font-bold text-emerald-600 mt-1.5 p-1.5 bg-emerald-50 rounded border border-emerald-100" title="${item.tindak_lanjut_lurah}"><i class="fas fa-check-circle mr-1"></i><span class="text-emerald-500">Lurah:</span> ${item.tindak_lanjut_lurah}</div>`;
+                            } 
+                            // Jika menunggu respon dan user adalah lurah/operator
+                            else if (item.status_selesai === 'Diteruskan ke Kelurahan' && isOperator) {
+                                masalahHtml += `<button onclick="ui.openSolveModal('${item.id}')" class="mt-2 w-full px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg shadow-md shadow-emerald-500/20 text-xs font-bold transition-all flex items-center justify-center gap-2"><i class="fas fa-edit"></i> Beri Tanggapan</button>`;
+                            }
+                            // Jika menunggu respon dan user adalah Kaling
+                            else if (item.status_selesai === 'Diteruskan ke Kelurahan') {
+                                masalahHtml += `<div class="text-[11px] font-bold text-amber-600 mt-1"><i class="fas fa-clock mr-1"></i> Menunggu Respon Lurah</div>`;
+                            }
                         }
 
                         let lampiranBtn = item.foto_url ? `<a href="${item.foto_url}" target="_blank" class="w-8 h-8 rounded-lg bg-blue-50 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm mx-auto" title="Lihat Bukti Foto"><i class="fas fa-image"></i></a>` : `<span class="text-slate-300 text-xs">-</span>`;
@@ -782,7 +888,7 @@
                             ${isOperator ? `<td class="p-4 whitespace-nowrap"><div class="font-extrabold text-slate-800">${item.nama}</div><div class="text-[11px] font-extrabold text-slate-400 uppercase mt-0.5">${item.lingkungan}</div></td>` : ''}
                             <td class="p-4 whitespace-nowrap"><span class="px-2.5 py-1 bg-primary/10 text-primary-dark font-extrabold text-xs rounded-md border border-primary/20">${item.jenis}</span></td>
                             <td class="p-4 whitespace-normal"><p class="text-xs font-medium text-slate-600 leading-relaxed">${item.uraian}</p></td>
-                            <td class="p-4 text-center">${masalahHtml}</td>
+                            <td class="p-4 align-top">${masalahHtml}</td>
                             <td class="p-4 pr-6 text-center whitespace-nowrap">${lampiranBtn}</td>
                         `;
                         tbody.appendChild(row);
@@ -798,9 +904,15 @@
                 if(!window.currentFilteredData || window.currentFilteredData.length === 0) { ui.showToast('Gagal Cetak', 'Tidak ada data untuk diekspor pada filter ini.', 'error'); return null; }
                 const dataArray = [];
                 window.currentFilteredData.forEach((item, index) => {
+                    // Gabungkan penyelesaian Lurah ke dalam kolom Status jika ada
+                    let statusAkhir = item.status_selesai || '-';
+                    if (item.tindak_lanjut_lurah) {
+                        statusAkhir += ` (Tanggapan Lurah: ${item.tindak_lanjut_lurah})`;
+                    }
+
                     dataArray.push([
                         (index + 1).toString(), ui.formatDateID(item.tanggal), item.nama, item.lingkungan, item.jenis, item.uraian,
-                        item.ada_masalah, item.detail_masalah || '-', item.tindak_lanjut || '-', item.status_selesai || '-', item.foto_url || '-'
+                        item.ada_masalah, item.detail_masalah || '-', item.tindak_lanjut || '-', statusAkhir, item.foto_url || '-'
                     ]);
                 });
                 return dataArray;
@@ -822,11 +934,11 @@
 
                         doc.autoTable({
                             startY: 38,
-                            head: [['No', 'Tanggal', 'Nama Kaling', 'Lingkungan', 'Jenis Kegiatan', 'Uraian', 'Masalah', 'Detail', 'Tindak Lanjut', 'Status', 'Lampiran']],
+                            head: [['No', 'Tanggal', 'Nama Kaling', 'Lingkungan', 'Jenis Kegiatan', 'Uraian', 'Masalah', 'Detail', 'Tindak Lanjut', 'Status & Tanggapan', 'Lampiran']],
                             body: tableData,
                             theme: 'grid', styles: { fontSize: 7, cellPadding: 2, font: 'helvetica' },
                             headStyles: { fillColor: [14, 165, 233], textColor: [255, 255, 255], fontStyle: 'bold' },
-                            columnStyles: { 0: { cellWidth: 8, halign: 'center' }, 5: { cellWidth: 40 }, 7: { cellWidth: 30 }, 8: { cellWidth: 30 }, 10: {cellWidth: 20} }
+                            columnStyles: { 0: { cellWidth: 8, halign: 'center' }, 5: { cellWidth: 35 }, 7: { cellWidth: 30 }, 8: { cellWidth: 30 }, 9: { cellWidth: 40 }, 10: {cellWidth: 15} }
                         });
                         doc.save(`Laporan_Kaling_${bln}_${thn}.pdf`); ui.hideLoading(); ui.showToast('Sukses', 'File PDF berhasil diunduh.', 'success');
                     } catch (e) { ui.hideLoading(); ui.showToast('Error', 'Gagal membuat PDF.', 'error'); }
@@ -841,7 +953,7 @@
                         const thn = document.getElementById('filter-tahun-select').value;
                         const excelData = [
                             ['LAPORAN KINERJA KEPALA LINGKUNGAN'], [`Periode: ${bln} ${thn}`], [], 
-                            ['No', 'Tanggal', 'Nama Kaling', 'Lingkungan', 'Jenis Kegiatan', 'Uraian', 'Ada Masalah', 'Detail Masalah', 'Tindak Lanjut', 'Status Penyelesaian', 'Link Lampiran']
+                            ['No', 'Tanggal', 'Nama Kaling', 'Lingkungan', 'Jenis Kegiatan', 'Uraian', 'Ada Masalah', 'Detail Masalah', 'Tindak Lanjut', 'Status & Tanggapan Kelurahan', 'Link Lampiran']
                         ];
                         const ws = XLSX.utils.aoa_to_sheet(excelData.concat(tableData));
                         const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Rekap_Kaling");
